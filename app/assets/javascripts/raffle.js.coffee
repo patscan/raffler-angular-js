@@ -5,7 +5,8 @@ app = angular.module("Raffler", ["ngResource"])
   $scope.entries = Entry.query()
 
   $scope.addEntry = ->
-    $scope.entries.push($scope.newEntry)
+    entry = Entry.save($scope.newEntry)
+    $scope.entries.push(entry)
     $scope.newEntry = {}
 
   $scope.drawWinner = ->
@@ -15,4 +16,7 @@ app = angular.module("Raffler", ["ngResource"])
     if pool.length > 0
       entry = pool[Math.floor(Math.random() * pool.length)]
       entry.winner = true
+      // similar to Entry.update(entry), but entry is a resource object
+      // so we can call methods on it like this (with $).
+      entry.$update()
       $scope.lastWinner = entry
